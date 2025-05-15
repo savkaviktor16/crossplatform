@@ -16,7 +16,7 @@ $(GOOS_LIST):
 deps:
 	go mod tidy
 
-docker-build:
+image:
 	@echo "Building Docker image..."
 	docker buildx build \
 		--platform=$(PLATFORMS) \
