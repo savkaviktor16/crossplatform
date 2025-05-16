@@ -1,4 +1,4 @@
-FROM golang:1.24-alpine AS builder
+FROM quay.io/projectquay/golang:1.24 AS builder
 
 ARG TARGETOS
 ARG TARGETARCH
