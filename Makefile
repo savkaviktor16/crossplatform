@@ -1,28 +1,35 @@
-APP := crossp
+APP := app
 REGISTRY ?= ghcr.io/savkaviktor16
 VERSION := $(shell git describe --tags --abbrev=0)
 BUILD_DIR := bin
 ARCH ?= amd64
 GOOS_LIST := linux windows darwin
 IMAGE_TAG := ${REGISTRY}/${APP}:${VERSION}
-PLATFORMS=linux/amd64,linux/arm64
+TARGETOS ?= linux
+TARGETARCH ?= amd64
+CGO_ENABLED ?= 0
+BINARY := $(APP)
 
 .PHONY: clean
-
-$(GOOS_LIST):
-	@echo "Building for GOOS=$@, GOARCH=$(ARCH)..."
-	GOOS=$@ GOARCH=$(ARCH) CGO_ENABLED=0 go build -v -o $(BUILD_DIR)/$(APP)-$@-$(ARCH)
 
 deps:
 	go mod tidy
 
+$(GOOS_LIST): deps
+	@echo "Building for GOOS=$@, GOARCH=$(ARCH)..."
+	GOOS=$@ GOARCH=$(ARCH) CGO_ENABLED=0 go build -v -o $(BUILD_DIR)/$(APP)-$@-$(ARCH)
+
+build: deps
+	@CGO_ENABLED=$(CGO_ENABLED) GOOS=$(TARGETOS) GOARCH=$(TARGETARCH) \
+		go build -o /go/src/app/${BINARY} .
+
 image:
 	@echo "Building Docker image..."
-	docker buildx build \
-		--platform=$(PLATFORMS) \
-		--build-arg BINARY=app \
-		-t $(IMAGE_TAG) \
-		--push .
+	docker build -t $(IMAGE_TAG) .
+
+push:
+	@echo "Pushing Docker image..."
+	docker push $(IMAGE_TAG)
 
 start:
 	@echo "Starting containers..."

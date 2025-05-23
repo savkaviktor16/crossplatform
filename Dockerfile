@@ -7,8 +7,7 @@ ARG BINARY=app
 WORKDIR /go/src/app
 COPY . .
 
-RUN go mod tidy
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /go/src/app/${BINARY} .
+RUN make build TARGETOS=${TARGETOS} TARGETARCH=${TARGETARCH} BINARY=${BINARY}
 
 FROM scratch
 
