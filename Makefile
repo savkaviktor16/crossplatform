@@ -14,9 +14,6 @@ BINARY := $(APP)
 deps:
 	go mod tidy
 
-test:
-	go test -v
-
 $(GOOS_LIST): deps
 	@echo "Building for GOOS=$@, GOARCH=$(ARCH)..."
 	GOOS=$@ GOARCH=$(ARCH) CGO_ENABLED=0 go build -v -o $(BUILD_DIR)/$(APP)-$@-$(ARCH)
