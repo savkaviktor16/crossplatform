@@ -21,9 +21,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker image...'
-                sh 'make image \
-                    TARGETOS=${params.TARGETOS} \
-                    TARGETARCH=${params.TARGETARCH}'        
+                sh "make image TARGETOS=${params.TARGETOS} TARGETARCH=${params.TARGETARCH}"    
             }
         }
 
