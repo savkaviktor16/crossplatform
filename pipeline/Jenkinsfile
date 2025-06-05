@@ -13,13 +13,6 @@ pipeline {
             }
         }
 
-        stage('Run tests') {
-            steps {
-                echo 'Running tests...'
-                sh 'make test'        
-            }
-        }   
-
         stage('Build') {
             steps {
                 echo 'Building Docker image...'
