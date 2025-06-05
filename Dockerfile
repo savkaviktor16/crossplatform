@@ -15,4 +15,4 @@ ARG BINARY=app
 WORKDIR /
 COPY --from=builder /go/src/app/${BINARY} /${BINARY}
 COPY --from=alpine:latest /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-ENTRYPOINT ["/app"]
+ENTRYPOINT ["/app", "start"]
